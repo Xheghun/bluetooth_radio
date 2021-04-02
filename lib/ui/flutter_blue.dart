@@ -1,4 +1,4 @@
-import 'package:bluetooth_scanner/ui/res/color.dart';
+import 'package:bluetooth_scanner/res/color.dart';
 import 'package:bluetooth_scanner/ui/screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
