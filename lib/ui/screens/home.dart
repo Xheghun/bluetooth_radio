@@ -16,28 +16,31 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List<ScanResult> devices = [];
 
+  @override
+  void initState() {
+    scan();
+    super.initState();
+  }
+
   void scan() async {
     print("start scan");
     await _flutterBlue.startScan(timeout: Duration(seconds: 6));
 
     _flutterBlue.scanResults.listen((results) {
       for (ScanResult result in results) {
-        devices.add(result);
+        if (!devices.contains(result)) devices.add(result);
         print(result.device.name);
       }
-
-      _flutterBlue.stopScan();
-
-      setState(() {
-        print("scan completed");
-      });
     }, onDone: () {}, onError: (error) {}, cancelOnError: true);
+
+    _flutterBlue.stopScan();
+    setState(() {
+      print("scan completed");
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    scan();
-
     double margin = MediaQuery.of(context).size.width * 0.2;
     return Scaffold(
       floatingActionButton: FloatingActionButton(
@@ -45,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
         onPressed: scan,
       ),
       appBar: AppBar(
-        title: Text("Blue",style: appBarTitle),
+        title: Text("Blue", style: appBarTitle),
       ),
       body: Container(
         child: Column(
@@ -61,7 +64,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 itemCount: devices.length,
                 itemBuilder: (context, index) {
                   ScanResult result = devices[index];
-
 
                   //animate transistion
                   return OpenContainer(
